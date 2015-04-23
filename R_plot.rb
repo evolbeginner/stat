@@ -9,6 +9,7 @@ x_label=nil
 y_label=nil
 Plot=File.expand_path("/home/sswang/tools/self_bao_cun/stat/Plot_ErrorBar.R")
 
+
 ############################################################
 opts=GetoptLong.new(
   ['-i', '--in', '--infile', GetoptLong::REQUIRED_ARGUMENT],
@@ -43,6 +44,7 @@ end
 
 outfile=outfile.nil? ? (out_prefix+'.pdf') : outfile
 raise "outfile not given!" if outfile.nil?
+
 
 ############################################################
 infiles_arg=[infiles.join(' '), x_label, y_label].join(' ')
