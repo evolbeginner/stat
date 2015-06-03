@@ -20,6 +20,7 @@ def read_input(input, sep="\t", values={}):
                 values[order].append(float(ele))
     return(values)
 
+
 def output_values(value_array, value_array_name, is_with_title=False, is_title_diff_line=False):
     if is_with_title:
         print value_array_name,
@@ -31,6 +32,7 @@ def output_values(value_array, value_array_name, is_with_title=False, is_title_d
         else:
             pass
     print "\t".join(map(lambda x: str(x), value_array))
+
 
 def get_median(a):
     if len(a) < 1:

@@ -27,7 +27,7 @@ for opt, value in opts:
         for i in value.split(','):
             numbers.append(int(i))
     elif opt == "--class_num":
-        for index, i in enumerate(value.split(';')):
+        for index, i in enumerate(value.split(' ')):
             class_numbers.append([])
             for j in i.split(','):
                 class_numbers[index].append(int(j))
