@@ -34,11 +34,11 @@ foreach my $order (0..$#ARGV){
             $sep = $ARGV[$order+1];
             $is_next = 1;
         }
-        when (/^--max$/){
+        when (/^-?-max$/){
             $max = $ARGV[$order+1];
             $is_next = 1;
         }
-        when (/^--min$/){
+        when (/^-?-min$/){
             $min = $ARGV[$order+1];
             $is_next = 1;
         }
