@@ -29,7 +29,7 @@ foreach my $order (0..$#ARGV){
             $fields[1] = $ARGV[$order+1];
             $is_next = 1;
         }
-        when (/^--sep$/){
+        when (/^-?-sep$/){
             $sep = $ele;
             $is_next = 1;
         }
