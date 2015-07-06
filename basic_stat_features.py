@@ -17,6 +17,8 @@ def read_input(input, sep="\t", values={}):
                 order = index + num_of_values_already
                 if order not in values:
                     values[order]=[]
+                if ele == '':
+                    continue
                 values[order].append(float(ele))
     return(values)
 
@@ -47,6 +49,8 @@ is_mean = False
 is_std = False
 is_median = False
 is_limits = False
+is_max = False
+is_min = False
 is_count = False
 sep = "\t"
 inputs = []
@@ -60,10 +64,11 @@ medians = []
 limits = []
 values = {}
 
+
 opts, args = getopt.getopt(
     sys.argv[1:],
     "i:",
-    ["in=","input=","count","mean","std","median","limits","limit","minmax","sep=","with_title","title_diff_line"],
+    ["in=","input=","count","mean","std","median","limits","limit","minmax","max","min","sep=","with_title","title_diff_line"],
 )
 
 for op, value in opts:
@@ -77,14 +82,20 @@ for op, value in opts:
         is_std = True
     elif op == "--median":
         is_median = True
-    elif op == "--limits" or op == "--limit" or op == "minmax":
+    elif op == "--limits" or op == "--limit" or op == "--minmax":
         is_limits = True
+    elif op == "--max":
+        is_max = True
+    elif op == "--min":
+        is_min = True
     elif op == "--sep":
         sep = value
     elif op == "--with_title":
         is_with_title = True
     elif op == "--title_diff_line":
         is_title_diff_line = True
+    else:
+        raise "illegal params"
 
 
 ##################################################
@@ -111,5 +122,9 @@ if is_median:
     output_values(medians, 'median', )
 if is_limits:
     output_values(limits, 'minmax', )
+if is_min:
+    output_values(map(lambda x: x.split(',')[0], limits), 'min')
+if is_max:
+    output_values(map(lambda x: x.split(',')[1], limits), 'max')
 
 
