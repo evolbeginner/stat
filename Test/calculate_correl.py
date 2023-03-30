@@ -1,16 +1,20 @@
-#! /bin/env
+#! /bin/env python
 
 from scipy.stats import pearsonr
 from scipy.stats import spearmanr
 import getopt
 import sys
 import re
+import math
+
+import selfbasics
 
 
 ##########################################################################
 inputs = []
 fields = []
-field_sep = " "
+field_sep = "\t"
+max = [None, None]
 
 is_pearson = True
 is_spearman = True
@@ -19,13 +23,24 @@ is_with_title = False
 
 
 ##########################################################################
-def read_input(inputs, fields, field_sep):
+def read_input(inputs, fields, field_sep, max=[None,None]):
     values = {}
     for index_1, input in enumerate(inputs):
-        fh = open(input, 'r')
+        if input == '-':
+            fh = sys.stdin
+        else:
+            fh = open(input, 'r')
         for line in fh.readlines():
             line = line.rstrip('\n\r')
-            line_array = line.split("\t")
+            line_array = line.split(field_sep)
+            value1, value2 = line_array[fields[index_1][0]], line_array[fields[index_1][1]]
+            if (not selfbasics.isNumeric(value1) or not selfbasics.isNumeric(value2)):
+                continue
+            value1, value2 = map (lambda x: float(x), [value1, value2])
+            if math.isnan(value1) or math.isnan(value2):
+                continue
+            if max[0] and value1 > max[0] or max[1] and value2 > max[1]:
+                continue
             for index_2, field in enumerate(fields[index_1]):
                 key = '-'.join([str(index_1),str(index_2)])
                 if not key in values:
@@ -54,7 +69,7 @@ def get_correl_coeffieicnt(method, values_0, values_1, is_only_p_value):
 opts, args = getopt.getopt(
     sys.argv[1:],
     'i:f:',
-    ['in=', 'field=', 'sep=', 'field_sep=', "no_pearson", "no_spearman", "only_p_value", "only_p-value", "with_title"]
+    ['in=', 'field=', 'sep=', 'field_sep=', "no_pearson", "no_spearman", "only_p_value", "only_p-value", "with_title", "max1=", "max2="]
 )
 
 
@@ -68,6 +83,8 @@ for opt, value in opts:
             for j in i.split(','):
                 fields[index].append(int(j)-1)
     elif opt == '-f' or opt == '--field':
+        pass
+    elif opt == "--sep" or opt == "--field_sep":
         field_sep = value
     elif opt == "--no_pearson":
         is_pearson = False
@@ -77,6 +94,10 @@ for opt, value in opts:
         is_only_p_value = True
     elif opt == "--with_title":
         is_with_title = True
+    elif opt == "--max1":
+        max[0] =  float(value)
+    elif opt == "--max2":
+        max[1] =  float(value)
 
 
 if not fields:
@@ -87,7 +108,8 @@ if not fields:
 
 
 ##########################################################################
-values = read_input(inputs, fields, field_sep)
+values = read_input(inputs, fields, field_sep, max)
+#v0 = map(lambda x: math.log10(x), values.values()[0])
 
 if is_pearson:
     if is_with_title:
@@ -98,5 +120,4 @@ if is_spearman:
         print "spearman"+"\t",
     print get_correl_coeffieicnt('spearman', values.values()[0], values.values()[1], is_only_p_value)
     
-
 

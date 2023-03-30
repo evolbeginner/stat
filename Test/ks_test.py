@@ -11,7 +11,7 @@ def read_list(list_file):
     list = []
     for line in open(list_file, 'r').readlines():
         line = line.rstrip('\n\r')
-        list.append(float(line))
+        list.append(float(line.split("\t")[0]))
     return(list)
 
 

@@ -13,5 +13,5 @@ else:
     p = 0.5
 
 print stats.binom_test(num1, num1+num2, p)
-print 1-stats.binom.sf(num1, num1+num2, p)
+print (1-stats.binom.sf(num1, num1+num2, p))
 

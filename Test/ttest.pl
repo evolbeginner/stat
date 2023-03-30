@@ -21,6 +21,11 @@ foreach my $order (0..$#ARGV){
     }
     my $ele = $ARGV[$order];
     given($ele){
+        when (/^-f$/){
+            $fields[0] = $ARGV[$order+1];
+            $fields[1] = $ARGV[$order+1];
+            $is_next = 1;
+        }
         when (/^-f1$/){
             $fields[0] = $ARGV[$order+1];
             $is_next = 1;
